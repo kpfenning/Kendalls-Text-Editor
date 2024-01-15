@@ -4,10 +4,10 @@ const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const workBox = require('workbox-webpack-plugin');
 
 // TODO: Add CSS loaders and babel to webpack.
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const cssPlugin = require('mini-css-extract-plugin');
 
 
 module.exports = () => {
@@ -16,9 +16,6 @@ module.exports = () => {
     entry: {
       main: './src/js/index.js',
       install: './src/js/install.js',
-      database: './src/js/database.js',
-      editor: './src/js/editor.js',
-      header: './src/js/header.js',
     },
     output: {
       filename: '[name].bundle.js',
@@ -27,7 +24,7 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'Webpack Plugin',
+        filename: 'index.html',
       }),
       new InjectManifest({
         swSrc: './src-sw.js',
@@ -49,31 +46,21 @@ module.exports = () => {
           },
         ],
       }),
+      new cssPlugin({
+        filename: './src/css/style.css',
+      }),
     ],
 
     module: {
       rules: [
         {
-          test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
-        },
-        {
-          test: /\.(png|jpe?g|gif|svg)$/i,
-          type: 'asset/resource',
-        },
-        {
-          test: /\.m?js$/,
+          test: /\.js$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [
-                "@babel/plugin-proposal-object-rest-spread",
-                "@babel/transform-runtime",
-              ],
-            },
-          },
+          use: { loader: 'babel-loader' },
+        },
+        {
+          test: /\.css$/,
+          use: [cssPlugin.loader, 'css-loader'],
         },
       ],
     },
