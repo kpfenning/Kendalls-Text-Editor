@@ -56,5 +56,10 @@ Clone repo on your local machine, npm run dev, npm start, localhost:3000
 
 ## Screenshots
 
+![screenshot](./client/src/images/jate.png)
+
+![screenshot](./client/src/images/jate2.png)
+
+
 
 
